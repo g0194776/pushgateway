@@ -608,18 +608,14 @@ func (gs Gatherers) Gather() ([]*dto.MetricFamily, error) {
 			existingMF, exists := metricFamiliesByName[mf.GetName()]
 			if exists {
 				if existingMF.GetHelp() != mf.GetHelp() {
-					errs = append(errs, fmt.Errorf(
-						"gathered metric family %s has help %q but should have %q",
-						mf.GetName(), mf.GetHelp(), existingMF.GetHelp(),
-					))
-					continue
+					fmt.Printf("MetricsFamily.Help changed: %s -> %s\n", existingMF.GetHelp(), mf.GetHelp())
+					//overwrites existed metric attributes.
+					existingMF.Help = mf.Help
 				}
 				if existingMF.GetType() != mf.GetType() {
-					errs = append(errs, fmt.Errorf(
-						"gathered metric family %s has type %s but should have %s",
-						mf.GetName(), mf.GetType(), existingMF.GetType(),
-					))
-					continue
+					fmt.Printf("MetricsFamily.Type changed: %s -> %s\n", existingMF.GetType(), mf.GetType())
+					//overwrites existed metric attributes.
+					existingMF.Type = mf.Type
 				}
 			} else {
 				existingMF = &dto.MetricFamily{}
